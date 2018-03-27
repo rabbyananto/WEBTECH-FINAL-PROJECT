@@ -5,7 +5,7 @@
 	$email= $erremail = $pass = $errpass = $cpass = $errcpass = $name = $errname = $usertype = $errusertype = "";
 	$name=$email=$pass=$cpass=$user="";
     $flag=1;
-    echo "baaal";
+    echo "working";
    
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
@@ -21,21 +21,6 @@
 	if(isset($_POST['submit'])){
 
 	
-		/*if(!(empty($id)))
-		{
-			if(preg_match("/^[a-zA-z]*4/",$id))
-			{
-				$id="";
-				$errid="Can contain only digits";
-				$flag=0;
-			}
-		}
-		else
-		{
-			$id="";
-			$errid = "Cannot be empty";
-			$flag=0;
-        }*/
 		
 		if(!(empty($pass))){
 			if(strlen($pass)<4)
@@ -76,15 +61,16 @@
 		{
 			die("Connection failed: " . mysqli_connect_error());
 		}
-		/*$sql0="SELECT id FROM users " ;
+
+		$sql0="SELECT id FROM users " ;
 		if ($result=mysqli_query($conn,$sql0))
   				{
   // Return the number of rows in result set
-				  $rowcount=mysqli_num_fields($result);
-				  
-				  }*/
+				  $rowcount=mysqli_num_rows($result);
+		         	$rowcount+=1;	  
+				  }
     
-			$sql="INSERT INTO users values('$name','$email','$pass','$usertype')";
+			$sql="INSERT INTO users values('$rowcount','$name','$email','$pass','$usertype')";
 			if(mysqli_query($conn,$sql))
 			echo "successful";
 		else
@@ -108,7 +94,7 @@
 <body>
 
    <form action="#" method="POST">
-	    <div align="Center" border="1px" >
+	    <div align="Center" width=33% border="1px" >
              <div >
    		            <h2> SIGN UP </h2>
 		            <p>Please provide the following informations to Sign up</p>
@@ -117,22 +103,30 @@
 			<br/>
             <div >
 		        <label >Name : </label>
-		        <input type="text" id = "name" name="name"><br/>
+		        <input type="text" id = "name" name="name" onblur="getName()">
+				<span style="color:red;">*<?php echo $errname ?></span>
+				<br/>
 	        </div>
 			<br/>
             <div>
 		        <label>Email : </label>
-		        <input type="text" id = "email" name="email"><br/>
+		        <input type="email" id = "email" name="email" onblur="getEmail()">
+				<span style="color:red;">*<?php echo $erremail ?></span>
+				<br/>
 	        </div>
 			<br/>
             <div >
 		        <label >Password : </label>
-		        <input type="password" id = "pass" name="pass"><br/>
+		        <input type="password" id = "pass" name="pass" onblur="getPass()">
+				<span style="color:red;">*<?php echo $errpass ?></span>
+				<br/>
 	        </div>
 	        <br/>
             <div >
 		        <label>Confirm Password : </label>
-		        <input type="password" id = "cpass" name="cpass"><br/>
+		        <input type="password" id = "cpass" name="cpass">
+				<span style="color:red;">*<?php echo $errcpass ?></span>
+				<br/>
 	        </div>
 	        <br/>
             <div >
@@ -146,7 +140,7 @@
 	</form>
 
 </body>
-
+<script type="text/javascript" src='myjavascript.js'></script>
 </html>
 
 

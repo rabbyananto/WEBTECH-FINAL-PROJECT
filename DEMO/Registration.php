@@ -1,44 +1,37 @@
 <?php
-   
-   
 
 	//error_reporting(0);
 		
-	$id = $errid = $pass = $errpass = $cpass = $errcpass = $name = $errname = $usertype = $errusertype = "";
-	$name=$id=$pass=$cpass=$user="";
-	$flag=1;
+	$email= $erremail = $pass = $errpass = $cpass = $errcpass = $name = $errname = $usertype = $errusertype = "";
+	$name=$email=$pass=$cpass=$user="";
+    $flag=1;
+    echo "working";
+   
 	if($_SERVER["REQUEST_METHOD"] == "POST")
 	{
 		$name=trim($_POST['name']);
-		$id=trim($_POST['id']);
+		$email=trim($_POST['email']);
 		$pass=trim($_POST['pass']);
 		$cpass=trim($_POST['cpass']);
-		$usertype="User";
+		$usertype="1";
+
+		print "name";
 	
+       
 	if(isset($_POST['submit'])){
 
-	
-		if(!(empty($id)))
-		{
-			if(preg_match("/^[a-zA-z]*4/",$id))
-			{
-				$id="";
-				$errid="Can contain only digits";
-				$flag=0;
-			}
-		}
-		else
-		{
-			$id="";
-			$errid = "Cannot be empty";
+		if (empty($_POST['email'])) {
+			$email="";
+			$erremail = "You forgot to enter your email address";
 			$flag=0;
-		}
+		} 
+		
 		
 		if(!(empty($pass))){
-			if(strlen($pass)<8)
+			if(strlen($pass)<4)
 			{
 				$pass ="";
-				$errpass = "Password must contains at least 8 characters";
+				$errpass = "Password must contains at least 4 characters";
 				$flag=0;
 			}
 		}
@@ -63,11 +56,7 @@
 			$flag=0;
 		}
 		
-		if (empty($usertype)) 
-		{
-			 $errusertype = "User_Type is required";
-			 $flag=0;
-		}
+		
 		
 		if($flag==1)
 		{
@@ -78,8 +67,16 @@
 			die("Connection failed: " . mysqli_connect_error());
 		}
 
+		$sql0="SELECT id FROM users " ;
+		if ($result=mysqli_query($conn,$sql0))
+  				{
+  // Return the number of rows in result set
+				  $rowcount=mysqli_num_rows($result);
+		         	$rowcount+=1;	  
+				  }
     
-			$sql="INSERT INTO user values('$id','$name','$pass','$usertype')";
+			$sql="INSERT INTO users values('$rowcount','$name','$email','$pass','$usertype')";
+			//have to check email duplicasy
 			if(mysqli_query($conn,$sql))
 			echo "successful";
 		else
@@ -95,26 +92,69 @@
 	}	
 ?>
 
+
+
+
+
 <html>
 <body>
-<center>
-<form action="#" method="POST">
-				<div>
-					<h3>REGISTRATION</h3>
-					Id<br/><input type="text" name="id" value="<?php echo $id ?>"><span style="color:red;">*<?php echo $errid ?></span><br/>
-					Password<br/><input type="password" name="pass" value="<?php echo $pass ?>"><span style="color:red;">*<?php echo $errpass ?></span><br/>
-					Confirm Password<br/><input type="password" name="cpass" value="<?php echo $cpass ?>"><span style="color:red;">*<?php echo $errcpass ?></span><br/>
-					Name<br/><input type="text" name="name" value="<?php echo $name ?>" ><span style="color:red;">*<?php echo $errname ?></span><br/>
-					User Type<hr/>
+
+   <form action="#" method="POST">
+	    <div align="Center" width=33% border="1px" >
+			<div>
+                 <h1 > PROTOTYPE OF CHOLO GHURI </h1> <hr/> 
+            </div>
+             <div >
+   		            <h2> SIGN UP </h2>
+		            <p>Please provide the following informations to Sign up</p>
+	        </div>
+	        
+			<br/>
+            <div >
+		        <label >Name : </label>
+		        <input type="text" id = "name" name="name" onblur="getName()">
+				<span style="color:red;">*<?php echo $errname ?></span>
+				<br/>
+	        </div>
+			<br/>
+            <div>
+		        <label>Email : </label>
+		        <input type="email" id = "email" name="email" onblur="getEmail()">
+				<span style="color:red;">*<?php echo $erremail ?></span>
+				<br/>
+	        </div>
+			<br/>
+            <div >
+		        <label >Password : </label>
+		        <input type="password" id = "pass" name="pass" onblur="getPass()">
+				<span style="color:red;">*<?php echo $errpass ?></span>
+				<br/>
+	        </div>
+	        <br/>
+            <div >
+		        <label>Confirm Password : </label>
+		        <input type="password" id = "cpass" name="cpass">
+				<span style="color:red;">*<?php echo $errcpass ?></span>
+				<br/>
+	        </div>
+	        <br/>
+            <div >
+		        <input type="submit" value="Sign Up" name="submit"><br/>
 				
-					<span style="color:red;">*<?php echo $errusertype ?></span>
-					<hr/>
-					<input type="submit" name="submit" value="Sign Up">
-					<a href="login.php">Sign In</a>
-					</div>
-				                           
-	
-</form>
-</center>
+				<a href="login.php">Log in</a>
+				
+	        </div>
+			<br/>
+		</div>	
+	</form>
+
 </body>
+<?php 
+   include("FOOTER/footer.php");
+?>
+<script type="text/javascript" src='myjavascript.js'></script>
 </html>
+
+
+
+
